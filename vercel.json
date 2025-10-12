@@ -3,10 +3,6 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/[...slug]"
-    },
-    {
-      "source": "/proxy",
-      "destination": "/api/proxy"
     }
   ]
 }
