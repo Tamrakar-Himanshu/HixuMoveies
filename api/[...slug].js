@@ -16,8 +16,15 @@ export default async function handler(req, res) {
   const { slug } = req.query;
   const path = Array.isArray(slug) ? slug.join('/') : slug;
   
+  // Remove slug from query params to avoid duplication
+  const queryParams = { ...req.query };
+  delete queryParams.slug;
+  
+  const queryString = new URLSearchParams(queryParams).toString();
+  const url = `https://api.themoviedb.org/3/${path}${queryString ? '?' + queryString : ''}`;
+  
   try {
-    const response = await fetch(`https://api.themoviedb.org/3/${path}?${new URLSearchParams(req.query).toString()}`, {
+    const response = await fetch(url, {
       method: req.method,
       headers: {
         'Accept': 'application/json',
