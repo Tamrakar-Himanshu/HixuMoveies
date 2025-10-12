@@ -12,5 +12,20 @@ const instance = axios.create({
   },
 });
 
+// Add request interceptor to handle proxy for production
+instance.interceptors.request.use(
+  (config) => {
+    // For production, we'll use the proxy endpoint
+    if (!isDevelopment && config.url) {
+      const tmdbUrl = `https://api.themoviedb.org/3${config.url}`;
+      config.url = `/proxy?url=${encodeURIComponent(tmdbUrl)}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export default instance;
  
